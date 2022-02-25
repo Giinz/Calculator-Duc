@@ -1,45 +1,172 @@
-let output = document.querySelector('.Output');
-let buttons = document.querySelectorAll('.Btn');
-buttons.forEach(function(btn){
-    btn.addEventListener('click',function(){
-        
-        // if(output.innerHTML == '0'){
-        //     output.innerHTML = '';
-        // }
-        if(btn.innerHTML == 'AC'){
-            output.innerHTML = '0';
-        }
-        else if (btn.innerHTML == 'DEL'){
-            let arrText = Array.from(output.innerHTML);
-            arrText.splice(arrText.length - 1,1);
-            if(arrText.length != 0){
-                output.innerHTML= arrText.join('');
-            }else if (arrText.length = 1){
-
-                output.innerHTML='0';
-            }    
-            else{
-                output.innerHTML='0';
-            }
-        }
-        else if(btn.innerHTML === '='){
-            if(output.innerHTML === '' || output.innerHTML === '0'){
-                output.innerHTML === '0';
-            }else{
-             output.innerHTML = eval(output.innerHTML);
-            }
-        }
-        else if (btn.innerHTML === '.' && output.innerHTML.includes('.')){
-            return
-        }
-        else {
-            output.innerHTML += btn.innerHTML;
-        }
-    })
+const number = [
+    {
+        label : '7',
+        value : '7',
+        dataType : 'number',
+    },
+    {
+        label : '8',
+        value : '8',
+        dataType : 'number',
+    },
+    {
+        label : '9',
+        value : '9',
+        dataType : 'number',
+    },
+    {
+        label : '4',
+        value : '4',
+        dataType : 'number',
+    },
+    {
+        label : '5',
+        value : '5',
+        dataType : 'number',
+    },
+    {
+        label : '6',
+        value : '6',
+        dataType : 'number',
+    },
+    {
+        label : '1',
+        value : '1',
+        dataType : 'number',
+    },
+    {
+        label : '2',
+        value : '2',
+        dataType : 'number',
+    },
+    {
+        label : '3',
+        value : '3',
+        dataType : 'number',
+    },
+    {
+        label : '0',
+        value : '0',
+        dataType : 'number',
+    },
+    {
+        label : '.',
+        value : '.',
+        dataType : 'operator',
+    },
+    {
+        label : '=',
+        value : '=',
+        dataType : 'operator',
+    }
+];
+const operator = [
+    {
+        label : 'DEL',
+        value : 'DEL',
+        dataType : 'operator',
+    },
+    {
+        label : 'x',
+        value : '*',
+        dataType : 'operator',
+    },
+    {
+        label : '÷',
+        value : '/',
+        dataType : 'operator',
+    },
+    {
+        label : '+',
+        value : '+',
+        dataType : 'operator',
+    },
+    {
+        label : '-',
+        value : '-',
+        dataType : 'operator',
+    },
+  
+];
+let clearBtn =
+    {
+    label : 'AC',
+    value : 'AC',
+    dataType : 'operator',
+    };
+let html = '',
+    html2 = '',
+    output = document.querySelector('.Output'),
+    opr = document.querySelector('.Operations'),
+    num = document.querySelector('.Numbers');
+    output.textContent = '0';
+number.map(function(item){
+    let numberButton = document.createElement('button');
+    numberButton.textContent = item.label;
+    num.appendChild(numberButton);
+    numberButton.setAttribute('value',item.value);
+    numberButton.setAttribute('data-type',item.dataType);
+    numberButton.className = 'Btn';
 })
-// let buttonsNumber = document.querySelectorAll('.Btn-number');
-// buttonsNumber.forEach(function(btnNumber){
-//     btnNumber.addEventListener('click',function(){
-//         output.innerHTML = '' + btnNumber.innerHTML;
-//     })
-// })
+operator.map(function(item){
+    let numberButton = document.createElement('button');
+    numberButton.textContent = item.label;
+    opr.appendChild(numberButton);
+    numberButton.setAttribute('data-type',item.dataType);
+    numberButton.setAttribute('value',item.value);
+    numberButton.className = 'Btn';
+})
+num.querySelector('.Btn:last-child').classList.add('Equal');
+let button = document.querySelectorAll('button'),
+    result = '0';
+let equalBtn = document.querySelector('.Equal'),
+    delBtn = opr.querySelector('.Btn:first-child'),
+    dotBtn = num.querySelector('.Btn:nth-child(11)');
+for (let i =0; i<button.length;++i){
+    button[i].onclick = function(){
+        if(output.textContent == '0'){
+            output.textContent = '';
+            result = '';
+        }
+        output.textContent += button[i].textContent;
+        result += button[i].getAttribute('value');
+        console.log(result)
+        
+    }
+}
+
+
+equalBtn.onclick = function(){
+    delBtn.textContent = clearBtn.label;
+    delBtn.setAttribute('value',clearBtn.value);
+    // result = eval(result);
+    output.textContent = eval(result);
+    delBtn.addEventListener('click', function(){
+        delBtn.textContent = operator[0].label;
+        delBtn.setAttribute('value',operator[0].value);
+    })
+}
+delBtn.onclick = function(){
+    if (delBtn.textContent === 'DEL' && delBtn.getAttribute('value') == 'DEL'){
+        let arrText = Array.from(output.textContent),
+        arrResult = Array.from(result);
+            arrText.splice(arrText.length - 1,1);
+            arrResult.splice(arrResult.length - 1, 1);
+            if(arrText.length != 0){
+                output.textContent= arrText.join('');
+                result = arrResult.join('');
+            }else if (arrText.length = 1){
+                output.textContent='0';
+                result = '0';
+            } 
+    }else 
+    if (delBtn.textContent === 'AC'){
+        output.textContent = '0';
+        result = '0';
+    }
+}
+dotBtn.addEventListener('click', function(){
+    if(output.textContent.includes('.')){
+        return
+    }
+})
