@@ -117,7 +117,7 @@ operator.map(function(item){
     numberButton.className = 'Btn';
 })
 num.querySelector('.Btn:last-child').classList.add('Equal');
-let button = document.querySelectorAll('button'),
+let button = num.querySelectorAll('button'),
     result = '0';
 let equalBtn = document.querySelector('.Equal'),
     delBtn = opr.querySelector('.Btn:first-child'),
@@ -130,12 +130,16 @@ for (let i =0; i<button.length;++i){
         }
         output.textContent += button[i].textContent;
         result += button[i].getAttribute('value');
-        console.log(result)
-        
     }
 }
 
-
+let oprBtn = opr.querySelectorAll('button');
+for (let z = 0; z<oprBtn.length; ++z){
+    oprBtn[z].onclick = function(){
+        output.textContent += oprBtn[z].textContent;
+        result += oprBtn[z].getAttribute('value');
+    }  
+}
 equalBtn.onclick = function(){
     delBtn.textContent = clearBtn.label;
     delBtn.setAttribute('value',clearBtn.value);
@@ -165,8 +169,10 @@ delBtn.onclick = function(){
         result = '0';
     }
 }
-dotBtn.addEventListener('click', function(){
-    if(output.textContent.includes('.')){
-        return
+dotBtn.onclick = function(){
+    if(!output.textContent.includes('.')){
+        output.textContent += dotBtn.textContent;
+        result += dotBtn.getAttribute('value');
     }
-})
+}
+console.log(eval(9*0.3));
