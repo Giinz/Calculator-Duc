@@ -100,6 +100,11 @@ let html = '',
     opr = document.querySelector('.Operations'),
     num = document.querySelector('.Numbers');
     output.textContent = '0';
+let logHistory = document.querySelector('.History');
+let history = [],
+    displayData = '',
+    resultData = '';
+    
 number.map(function(item){
     let numberButton = document.createElement('button');
     numberButton.textContent = item.label;
@@ -117,11 +122,12 @@ operator.map(function(item){
     numberButton.className = 'Btn';
 })
 num.querySelector('.Btn:last-child').classList.add('Equal');
-let button = num.querySelectorAll('button'),
+let button = num.querySelectorAll('[data-type="number"]'),
     result = '0';
 let equalBtn = document.querySelector('.Equal'),
     delBtn = opr.querySelector('.Btn:first-child'),
-    dotBtn = num.querySelector('.Btn:nth-child(11)');
+    dotBtn = num.querySelector('.Btn:nth-child(11)'),
+    minusBtn = opr.querySelector('.Btn:last-child');
 for (let i =0; i<button.length;++i){
     button[i].onclick = function(){
         if(output.textContent == '0'){
@@ -130,36 +136,66 @@ for (let i =0; i<button.length;++i){
         }
         output.textContent += button[i].textContent;
         result += button[i].getAttribute('value');
+        console.log(result);
     }
 }
-
 let oprBtn = opr.querySelectorAll('button');
 for (let z = 0; z<oprBtn.length; ++z){
     oprBtn[z].onclick = function(){
+        let oprLast = output.textContent[output.textContent.length - 1];
+        if ( oprLast == 'x'|| oprLast == '+' || oprLast == '-'|| oprLast == '÷') {
+            output.textContent = output.textContent.replace(output.textContent[output.textContent.length - 1], '');
+            result = result.replace(result[result.length - 1], '');
+          }
+        
         output.textContent += oprBtn[z].textContent;
         result += oprBtn[z].getAttribute('value');
-    }  
+        
+    } 
+    if(output.textContent[output.textContent.length - 2] == 'x'|| output.textContent[output.textContent.length - 2] == '+' || output.textContent[output.textContent.length - 2] == '-'|| output.textContent[output.textContent.length - 2] == '÷'){
+        oprBtn[z].disabled = true
+    }    
 }
+// minusBtn.onclick = function(){
+//     let oprLast = output.textContent[output.textContent.length - 1];
+//     if ( oprLast == 'x' || oprLast == '÷') {
+//         output.textContent = output.textContent.concat(minusBtn.textContent);
+//         result = result.concat(minusBtn.getAttribute('value'));
+//       }
+   
+// }
+function precisionRound(number, precision) {
+    var factor = Math.pow(10, precision);
+    return Math.round(number * factor) / factor;
+}
+
 equalBtn.onclick = function(){
+    displayData = output.textContent;
+    history.push({expression: displayData});
+    showHistory();
     delBtn.textContent = clearBtn.label;
     delBtn.setAttribute('value',clearBtn.value);
-    // result = eval(result);
-    output.textContent = eval(result);
+    output.textContent = precisionRound(eval(result),12);
     delBtn.addEventListener('click', function(){
         delBtn.textContent = operator[0].label;
         delBtn.setAttribute('value',operator[0].value);
     })
 }
+function showHistory(){
+    let log = '';
+    for(let key in history){
+        log = history[key].expression + '=';
+    }
+    logHistory.textContent = log;
+}
 delBtn.onclick = function(){
+    let display = output.textContent;
     if (delBtn.textContent === 'DEL' && delBtn.getAttribute('value') == 'DEL'){
-        let arrText = Array.from(output.textContent),
-        arrResult = Array.from(result);
-            arrText.splice(arrText.length - 1,1);
-            arrResult.splice(arrResult.length - 1, 1);
-            if(arrText.length != 0){
-                output.textContent= arrText.join('');
-                result = arrResult.join('');
-            }else if (arrText.length = 1){
+        display = display.substring(0,display.length -1)
+            if(display.length != 0){
+                output.textContent= display.concat('');
+                result = result.concat('');
+            }else if (display.length = 1){
                 output.textContent='0';
                 result = '0';
             } 
@@ -167,6 +203,7 @@ delBtn.onclick = function(){
     if (delBtn.textContent === 'AC'){
         output.textContent = '0';
         result = '0';
+        logHistory.textContent = '';
     }
 }
 dotBtn.onclick = function(){
@@ -175,4 +212,4 @@ dotBtn.onclick = function(){
         result += dotBtn.getAttribute('value');
     }
 }
-console.log(eval(9*0.3));
+

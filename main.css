@@ -48,18 +48,38 @@ body {
 
 .Calculator .Calculator__output {
   background: #fff;
-  height: 50px;
+  height: 100px;
   width: 100%;
   border: 1px solid #f1f3f4;
   position: relative;
+  overflow: hidden;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
 }
 
 .Calculator .Calculator__output .Output {
-  position: absolute;
-  height: 100%;
+  position: relative;
+  height: 60px;
   top: 0;
   right: 5px;
-  font-size: 40px;
+  font-size: 57px;
+}
+
+.Calculator .Calculator__output .History {
+  position: relative;
+  height: 30px;
+  top: 0;
+  right: 5px;
+  font-size: 30px;
+  color: #333;
 }
 
 .Calculator .Calculator__buttons {
